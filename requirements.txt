@@ -5,3 +5,4 @@ gunicorn
 werkzeug
 web3
 python-dotenv
+Flask-Login==0.6.3
