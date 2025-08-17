@@ -17,7 +17,7 @@ from flask import current_app  # near other imports if not already imported
 from dotenv import load_dotenv
 load_dotenv()
 from models import db, WalletNonce
-from app import app
+
 # app.py (top of file imports)
 
 
