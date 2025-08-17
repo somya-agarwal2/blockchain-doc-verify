@@ -481,13 +481,13 @@ def user_logout():
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
-        username = request.form['username']
+        email = request.form['email'] 
         password = request.form['password']
 
-        admin_username = os.getenv("ADMIN_USERNAME")
+        admin_username = os.getenv("ADMIN_EMAIL")
         admin_password = os.getenv("ADMIN_PASSWORD")
 
-        if username == admin_username and password == admin_password:
+        if email == admin_username and password == admin_password:
             session['admin_logged_in'] = True
             flash('Admin logged in.')
             return redirect(url_for('admin_dashboard'))
