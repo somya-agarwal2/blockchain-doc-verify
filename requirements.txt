@@ -1,0 +1,7 @@
+flask
+flask_sqlalchemy
+flask_migrate
+gunicorn
+werkzeug
+web3
+python-dotenv
