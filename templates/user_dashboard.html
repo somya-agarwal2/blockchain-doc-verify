@@ -135,9 +135,15 @@
               <p class="doc-title">{{ doc.title }}</p>
               <p class="doc-date">Issued on: {{ doc.issued_on.strftime('%Y-%m-%d') }}</p>
             </div>
-            <a href="{{ url_for('download_file', filename=doc.filename) }}" class="btn-download">
-              Download
-            </a>
+            <div style="display:flex; align-items:center; gap:16px;">
+    <!-- QR Code Image -->
+    <img src="{{ url_for('static', filename=doc.qr_path) }}" alt="QR Code" style="width:150px; height:150px; border:1px solid #ccc; padding:4px; border-radius:8px;">
+
+    <!-- Download Button -->
+    <a href="{{ url_for('download_file', filename=doc.filename) }}" class="btn-download" style="padding:10px 18px; background:#028391; color:#fff; border-radius:8px; text-decoration:none;">
+        Download
+    </a>
+</div>
           </li>
           {% endfor %}
         </ul>
