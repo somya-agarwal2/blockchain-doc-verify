@@ -299,7 +299,8 @@
       renderer: 'svg',
       loop: true,
       autoplay: true,
-      path: 'static/img/technology.json' // Replace with your preferred animation URL
+      path: "{{ url_for('static', filename='img/technology.json') }}"
+ // Replace with your preferred animation URL
     });
   </script>
 
