@@ -17,6 +17,7 @@ from flask import current_app  # near other imports if not already imported
 from dotenv import load_dotenv
 load_dotenv()
 from models import db, WalletNonce
+from app import app
 # app.py (top of file imports)
 
 
@@ -764,4 +765,5 @@ def link_wallet():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
