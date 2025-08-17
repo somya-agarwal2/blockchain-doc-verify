@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Document Verification{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+
+</head>
+<body class="bg-gradient-to-r from-blue-50 to-purple-100 min-h-screen font-sans text-gray-800">
+
+    <!-- Navbar -->
+    <nav class="flex justify-between items-center p-6 bg-white shadow-md">
+        <div class="text-xl font-bold text-blue-700">🔐 DocVerify</div>
+        <div class="space-x-6 text-gray-600 font-medium">
+            <a href="/" class="hover:text-blue-600">Home</a>
+            <a href="{{ url_for('home') }}#about" class="text-gray-700 hover:text-indigo-600">About</a>
+            <a href="{{ url_for('home') }}#FAQ" class="text-gray-700 hover:text-indigo-600">FAQ</a>
+            <a href="/contact" class="hover:text-blue-600">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <main class="px-6 py-12 md:px-20">
+        {% block content %}{% endblock %}
+    </main>
+
+</body>
+</html>
+

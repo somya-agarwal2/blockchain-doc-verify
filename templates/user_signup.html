@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>User Signup - Document Verification</title>
+  <style>
+    :root {
+      --navy: #01204E;
+      --teal: #028391;
+      --text-light: #cfefff;
+      --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      background: linear-gradient(135deg, var(--navy), var(--teal));
+      padding-top: 70px;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: var(--navy);
+      color: #fff;
+      z-index: 999;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 10%;
+    }
+    .topbar .brand {
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: 0.5px;
+    }
+    .topbar .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 24px;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+    .topbar .nav-links a:hover {
+      color: var(--teal);
+    }
+
+    .signup-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 70px);
+      padding: 30px 20px;
+    }
+
+    .signup-card {
+      background: #fff;
+      color: var(--navy);
+      padding: 40px 32px;
+      border-radius: 16px;
+      max-width: 450px;
+      width: 100%;
+      box-shadow: var(--card-shadow);
+    }
+
+    .signup-card h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .signup-card p {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #455a78;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--teal);
+      box-shadow: 0 0 0 2px rgba(2, 131, 145, 0.2);
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      background: var(--teal);
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: background 0.25s ease;
+    }
+
+    .btn:hover {
+      background: var(--navy);
+    }
+
+    .flash-message {
+      background-color: #ffe0e0;
+      color: #b00020;
+      padding: 10px 16px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+    }
+
+    .login-text {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 0.95rem;
+    }
+
+    .login-text a {
+      color: var(--teal);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .login-text a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 500px) {
+      .signup-card {
+        padding: 30px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="topbar">
+    <div class="nav-container">
+      <div class="brand">DocVerify</div>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="{{ url_for('home') }}#features">Features</a>
+        <a href="{{ url_for('home') }}#process">Process</a>
+        <a href="{{ url_for('home') }}#faq">FAQ</a>
+        <a href="{{ url_for('verifier') }}">Verify</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Signup Section -->
+  <div class="signup-wrapper">
+    <div class="signup-card">
+      <h2>📝 User Signup</h2>
+      <p>Create an account to verify and manage documents</p>
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="flash-message">
+            {% for message in messages %}
+              <p>{{ message }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form method="POST" action="{{ url_for('user_signup') }}">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" required placeholder="Enter your full name">
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" id="email" name="email" required placeholder="Enter your email">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required placeholder="Enter your password">
+        </div>
+
+        <div class="form-group">
+          <label for="confirm_password">Confirm Password</label>
+          <input type="password" id="confirm_password" name="confirm_password" required placeholder="Confirm your password">
+        </div>
+
+        <button type="submit" class="btn">Sign Up</button>
+      </form>
+
+      <p class="login-text">
+        Already have an account? <a href="{{ url_for('user_login') }}">Log in</a>
+      </p>
+    </div>
+  </div>
+
+</body>
+</html>

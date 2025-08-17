@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Verification Result - DocVerify</title>
+  <style>
+    :root {
+      --navy: #01204E;
+      --teal: #028391;
+      --text-light: #cfefff;
+      --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+      color: #fff;
+      background: linear-gradient(135deg, var(--navy), var(--teal));
+      padding-top: 70px;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      background: var(--navy);
+      color: #fff;
+      z-index: 999;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 10%;
+    }
+    .topbar .brand { font-weight: 800; font-size: 1.2rem; letter-spacing: 0.5px; }
+    .topbar .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 24px;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+    .topbar .nav-links a:hover { color: var(--teal); }
+
+    .login-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 70px);
+      padding: 30px 20px;
+    }
+
+    .login-card {
+      background: #fff;
+      color: var(--navy);
+      padding: 40px 32px;
+      border-radius: 16px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: var(--card-shadow);
+      text-align: center;
+    }
+
+    .login-card h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .login-card p { 
+      font-size: 0.95rem; 
+      color: #455a78; 
+      margin-bottom: 16px; 
+    }
+
+    .btn {
+      display: inline-block;
+      background: var(--teal);
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      margin-top: 16px;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: background 0.25s ease;
+      text-decoration: none;
+    }
+    .btn:hover { background: var(--navy); }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="topbar">
+    <div class="nav-container">
+      <div class="brand">DocVerify</div>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="{{ url_for('home') }}#features">Features</a>
+        <a href="{{ url_for('home') }}#process">Process</a>
+        <a href="{{ url_for('home') }}#faq">FAQ</a>
+        <a href="{{ url_for('verifier') }}">Verify</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Verification Result Card -->
+  <div class="login-wrapper">
+    <div class="login-card">
+      {% if result.verified %}
+        <h2>✅ Document Verified</h2>
+        <p><strong>📄 File:</strong> {{ result.file_name }}</p>
+        <p><strong>👤 Issued to:</strong> {{ result.user_name }} ({{ result.user_email }})</p>
+        <p><strong>🏢 Issuer:</strong> {{ result.issuer_email }}</p>
+        <p><strong>📅 Issued on:</strong> {{ result.issued_on }}</p>
+      {% else %}
+        <h2>❌ Document Not Verified</h2>
+        <p>No matching record was found for the uploaded file.</p>
+      {% endif %}
+
+      <a href="{{ url_for('verifier') }}" class="btn">⬅️ Verify Another Document</a>
+    </div>
+  </div>
+
+</body>
+</html>

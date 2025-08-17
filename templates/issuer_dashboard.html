@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Issuer Dashboard - Document Verification</title>
+  <style>
+    :root {
+      --navy: #01204E;
+      --teal: #028391;
+      --text-light: #cfefff;
+      --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      background: linear-gradient(135deg, var(--navy), var(--teal));
+      padding-top: 70px;
+    }
+
+    /* Navbar */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: var(--navy);
+      color: #fff;
+      z-index: 999;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 10%;
+    }
+    .topbar .brand { font-weight: 800; font-size: 1.2rem; letter-spacing: 0.5px; }
+    .topbar .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 24px;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+    .topbar .nav-links a:hover { color: var(--teal); }
+
+    /* Container */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    h1 { margin-bottom: 2rem; }
+
+    /* Cards & Stats */
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      color: var(--navy);
+      margin-bottom: 1.5rem;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card h2 { font-weight: 700; }
+    .stat-card p {
+      font-weight: 800;
+      font-size: 2rem;
+      color: var(--teal);
+      margin-top: 0.5rem;
+    }
+
+    /* Forms */
+    form input[type="text"],
+    form input[type="email"],
+    form input[type="file"] {
+      width: 100%;
+      border: 1px solid var(--teal);
+      border-radius: 12px;
+      padding: 0.5rem 1rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      color: var(--navy);
+    }
+    form button {
+      background: var(--teal);
+      color: white;
+      font-weight: 700;
+      padding: 0.75rem 1.5rem;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(2, 131, 145, 0.4);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    form button:hover { background: var(--navy); transform: translateY(-2px); }
+
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      color: var(--navy);
+    }
+    th, td { padding: 0.75rem 1rem; border-bottom: 1px solid #e2e8f0; text-align: left; }
+    thead { background-color: #e6f3f7; }
+    tbody tr:hover { background-color: #f0faff; }
+
+    /* Logout button */
+    .logout { text-align: right; margin-top: 2rem; }
+    .logout a {
+      background: linear-gradient(135deg, #9b2c2c, #7b1e1e);
+      color: #fff;
+      font-weight: 700;
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .logout a:hover {
+      background: linear-gradient(135deg, #7b1e1e, #9b2c2c);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    }
+
+    @media (max-width: 500px) {
+      .container { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="topbar">
+    <div class="nav-container">
+      <div class="brand">DocVerify</div>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="{{ url_for('home') }}#features">Features</a>
+        <a href="{{ url_for('home') }}#process">Process</a>
+        <a href="{{ url_for('home') }}#faq">FAQ</a>
+        <a href="{{ url_for('verifier') }}">Verify</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>🏢 Welcome, {{ session['issuer_email'] }}</h1>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card card text-center">
+        <h2>Total Documents Issued</h2>
+        <p>{{ documents|length }}</p>
+      </div>
+    </div>
+
+    <!-- Issue Document Form -->
+    <div class="card">
+      <h2>Issue New Document</h2>
+      <form action="/issuer/issue" method="POST" enctype="multipart/form-data">
+        <input type="text" name="user_name" placeholder="User Name" required />
+        <input type="email" name="user_email" placeholder="User Email" required />
+        <input type="text" name="file_name" placeholder="Document Name" required />
+        <input type="file" name="document" required />
+        <button type="submit">🚀 Issue Document</button>
+      </form>
+    </div>
+
+    <!-- Issued Documents Table -->
+    <div class="card">
+      <h2>📄 Issued Documents</h2>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>File Name</th>
+              <th>User Name</th>
+              <th>User Email</th>
+              <th>Issued On</th>
+              <th>QR Code</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for doc in documents %}
+            <tr>
+              <td>{{ doc.file_name }}</td>
+              <td>{{ doc.user_name }}</td>
+              <td>{{ doc.user_email }}</td>
+              <td>{{ doc.issued_on.strftime('%Y-%m-%d %H:%M') }}</td>
+              <td>
+                {% if doc.qr_code_path %}
+                  <a href="{{ url_for('static', filename=doc.qr_code_path) }}" target="_blank">
+                    <img src="{{ url_for('static', filename=doc.qr_code_path) }}" alt="QR Code" width="60" />
+                  </a>
+                {% else %}
+                  <span style="color: #a0aec0; font-style: italic;">N/A</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="5" style="text-align:center; color:#718096;">No documents issued yet.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Logout -->
+    <div class="logout">
+      <a href="/issuer/logout">🚪 Logout</a>
+    </div>
+  </div>
+
+</body>
+</html>

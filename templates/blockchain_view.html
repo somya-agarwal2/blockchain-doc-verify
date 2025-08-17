@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blockchain View</title>
+</head>
+<body>
+    <h2>Blockchain Blocks</h2>
+    {% for block in blocks %}
+        <hr>
+        <p><strong>Block #{{ block.index }}</strong></p>
+        <p>Timestamp: {{ block.timestamp }}</p>
+        <p>Hash: {{ block.hash }}</p>
+        <p>Previous Hash: {{ block.previous_hash }}</p>
+        <p>Data (File Hash): {{ block.data }}</p>
+    {% endfor %}
+    <br>
+    <a href="/">← Back to Home</a>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>User Dashboard - Document Verification</title>
+  <style>
+    :root {
+      --navy: #01204E;
+      --teal: #028391;
+      --text-light: #cfefff;
+      --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      background: linear-gradient(135deg, var(--navy), var(--teal));
+      padding-top: 70px;
+    }
+
+    /* Navbar */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: var(--navy);
+      color: #fff;
+      z-index: 999;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 10%;
+    }
+    .topbar .brand {
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: 0.5px;
+    }
+    .topbar .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 24px;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+    .topbar .nav-links a:hover { color: var(--teal); }
+
+    /* Dashboard wrapper */
+    .dashboard-wrapper {
+      display: flex;
+      justify-content: center;
+      padding: 30px 20px;
+      min-height: calc(100vh - 70px);
+    }
+    .dashboard-card {
+      background: #fff;
+      color: var(--navy);
+      padding: 40px 32px;
+      border-radius: 16px;
+      max-width: 900px;
+      width: 100%;
+      box-shadow: var(--card-shadow);
+    }
+    .dashboard-card h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .document-list { list-style: none; padding: 0; margin: 0; }
+    .document-item {
+      border: 1px solid #ccc;
+      padding: 16px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .document-item p { margin: 0; }
+    .doc-title { font-weight: 600; font-size: 1rem; }
+    .doc-date { font-size: 0.85rem; color: #555; }
+    .btn-download {
+      background: var(--teal);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.25s ease;
+    }
+    .btn-download:hover { background: var(--navy); }
+    .no-docs { color: #555; font-size: 1rem; text-align: center; }
+
+    @media (max-width: 500px) {
+      .dashboard-card { padding: 30px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="topbar">
+    <div class="nav-container">
+      <div class="brand">DocVerify</div>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="{{ url_for('home') }}#features">Features</a>
+        <a href="{{ url_for('home') }}#process">Process</a>
+        <a href="{{ url_for('home') }}#faq">FAQ</a>
+        <a href="{{ url_for('verifier') }}">Verify</a>
+        <a href="{{ url_for('user_logout') }}">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard Section -->
+  <div class="dashboard-wrapper">
+    <div class="dashboard-card">
+      <h1>👋 Welcome, {{ user.email }}</h1>
+
+      {% if documents %}
+        <ul class="document-list">
+          {% for doc in documents %}
+          <li class="document-item">
+            <div>
+              <p class="doc-title">{{ doc.title }}</p>
+              <p class="doc-date">Issued on: {{ doc.issued_on.strftime('%Y-%m-%d') }}</p>
+            </div>
+            <a href="{{ url_for('download_file', filename=doc.filename) }}" class="btn-download">
+              Download
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="no-docs">You have no issued documents yet.</p>
+      {% endif %}
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blockchain Document Verification</title>
+  <style>
+    :root{
+      --navy:#01204E;
+      --teal:#028391;
+      --text-light:#cfefff;
+      --card-shadow:0 6px 20px rgba(0,0,0,.15);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color:#fff;
+      background: linear-gradient(135deg, var(--navy), var(--teal));
+      padding-top: 70px; /* space for fixed navbar */
+    }
+
+    /* ---------- NAVBAR ---------- */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: var(--navy);
+      color: #fff;
+      z-index: 999;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 10%;
+    }
+    .topbar .brand {
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: 0.5px;
+    }
+    .topbar .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 24px;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+    .topbar .nav-links a:hover { color: var(--teal); }
+
+    /* ---------- HERO ---------- */
+    .hero{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:80px 10%; min-height:100vh; position:relative; overflow:hidden;
+    }
+    .hero-text{ max-width:50%; position:relative; z-index:2; }
+    .hero h1{ font-size:3rem; font-weight:800; margin:0 0 18px; }
+    .hero p{ font-size:1.1rem; color:var(--text-light); margin:0 0 28px; }
+    .role-buttons{ display:inline-flex; gap:12px; flex-wrap:wrap; }
+    .role-buttons a{ text-decoration:none; }
+    .btn{
+      display:inline-block; padding:12px 24px; border-radius:12px; font-weight:600;
+      background: var(--teal); color:#fff; border:none; cursor:pointer;
+      box-shadow:0 4px 12px rgba(0,0,0,.25);
+      transition:transform .2s ease, background .25s ease, box-shadow .25s ease;
+    }
+    .btn:hover{ transform:translateY(-3px); background:var(--navy); box-shadow:0 8px 18px rgba(0,0,0,.35); }
+    .btn:focus{ outline:2px solid #fff; outline-offset:2px; }
+    .hero-image{ position:absolute; right:8%; bottom:12%; z-index:1; }
+    /* remove original img styles, replace with lottie container */
+    #lottie-animation {
+      width: 400px;
+      height: 400px;
+      margin: 0 auto;
+    }
+
+    /* ---------- FEATURES ---------- */
+    .features{
+      padding:70px 10%; 
+      background: linear-gradient(120deg, #f0f8fa, #e6f3f7);
+      color:var(--navy); text-align:center;
+    }
+    .features h2{ margin:0 0 36px; font-size:2.2rem; font-weight:700; }
+    .feature-grid{
+      display:grid; gap:22px;
+      grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+    }
+    .feature-card{
+      background:#fff; border-radius:14px; padding:28px;
+      box-shadow: 0 6px 20px rgba(2,131,145,0.15);
+      border-top: 4px solid var(--teal);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .feature-card:hover{ transform:translateY(-6px); box-shadow:0 10px 26px rgba(2,131,145,0.25); }
+    .feature-card h3{ color:var(--teal); margin:10px 0 8px; }
+    .feature-card p{ color:#455a78; margin:0; }
+
+    /* ---------- PROCESS ---------- */
+    .process{
+      padding:80px 10%;
+      text-align:center;
+      background: linear-gradient(120deg, #eef7f9, #d8eef3);
+      color:var(--navy);
+    }
+    .process h2{ font-size:2.2rem; margin-bottom:50px; font-weight:700; }
+    .step-grid{
+      display:grid; gap:24px;
+      grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+    }
+    .step-card{
+      background:#fff; border-radius:16px; padding:26px; position:relative;
+      box-shadow:0 6px 20px rgba(2,131,145,0.15);
+      border-top:4px solid var(--teal);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .step-card:hover{ transform:translateY(-6px); box-shadow:0 12px 28px rgba(2,131,145,0.25); }
+    .step-badge{
+      width:44px; height:44px; border-radius:50%; display:grid; place-items:center;
+      background: linear-gradient(135deg, var(--navy), var(--teal));
+      color:#fff; font-weight:800; position:absolute; top:-22px; left:22px;
+      box-shadow:0 6px 14px rgba(0,0,0,.22);
+    }
+    .step-icon{ font-size:2rem; margin-top:8px; }
+    .step-card h3{ margin:10px 0 8px; }
+    .step-card p{ color:#455a78; margin:0; line-height:1.55; }
+
+    /* ---------- FAQ ---------- */
+    .faq{
+      padding:80px 10%; 
+      background: linear-gradient(120deg, #f7fbfd, #e6f3f7);
+      color:var(--navy);
+    }
+    .faq h2{ text-align:center; font-size:2.2rem; margin:0 0 32px; font-weight:700; }
+    .faq-wrap{ max-width:900px; margin:0 auto; display:grid; gap:14px; }
+    details.faq-card{
+      background:#fff; border-radius:12px; box-shadow:0 6px 20px rgba(2,131,145,0.15);
+      padding:0; overflow:hidden; border-left:4px solid var(--teal);
+    }
+    details.faq-card summary{
+      list-style:none; cursor:pointer; padding:18px 22px; font-weight:600; position:relative;
+      display:flex; align-items:center; gap:12px;
+    }
+    details.faq-card summary::-webkit-details-marker{ display:none; }
+    .faq-q{ flex:1; }
+    .faq-toggle{
+      width:26px; height:26px; border-radius:50%; display:grid; place-items:center;
+      background:rgba(2,131,145,.12); color:var(--teal); font-weight:900;
+      transition: transform .2s ease, background .2s ease;
+    }
+    details[open] .faq-toggle{ transform:rotate(45deg); background:rgba(2,131,145,.18); }
+    .faq-a{ padding:0 22px 20px 22px; color:#455a78; border-top:1px solid rgba(1,32,78,.06); }
+
+    /* ---------- FOOTER ---------- */
+    .footer{
+      background:#0b244a; color:#cfe3ff;
+      padding:24px 10%;
+      border-top:4px solid transparent;
+      border-image: linear-gradient(90deg, var(--teal), #3fd5e2) 1;
+    }
+    .footer-inner{
+      display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+    }
+    .brand{ font-weight:800; letter-spacing:.3px; color:#fff; }
+    .links{ display:flex; gap:16px; flex-wrap:wrap; }
+    .links a{ color:#cfe3ff; text-decoration:none; }
+    .links a:hover{ color:#fff; text-decoration:underline; }
+
+    @media (max-width:900px){
+      .hero{ flex-direction:column; text-align:center; padding:64px 6% 40px; }
+      .hero-text{ max-width:100%; }
+      .hero-image{ position:static; margin-top:-20px; }
+      #lottie-animation { margin: 20px auto 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="topbar">
+    <div class="nav-container">
+      <div class="brand">DocVerify</div>
+      <div class="nav-links">
+  <a href="{{ url_for('home') }}">Home</a>
+  <a href="{{ url_for('home') }}#features">Features</a>
+  <a href="{{ url_for('home') }}#process">Process</a>
+  <a href="{{ url_for('home') }}#faq">FAQ</a>
+  <a href="{{ url_for('verifier') }}">Verify</a>
+</div>
+
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-text">
+      <h1>Blockchain Document Verification</h1>
+      <p>Secure, tamper-proof, and instant verification of digital documents for users, issuers, and verifiers.</p>
+      <div class="role-buttons">
+        <a class="btn" href="{{ url_for('user_login') }}">👤 User</a>
+        <a class="btn" href="{{ url_for('issuer_redirect') }}">🏛️ Issuer</a>
+        <a class="btn" href="{{ url_for('verifier') }}">✔️ Verifier</a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <!-- Lottie Animation Container -->
+      <div id="lottie-animation"></div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <h2>Why Choose Our Platform?</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h3>🔒 Security</h3>
+        <p>All documents are hashed and anchored to blockchain to prevent tampering or fraud.</p>
+      </div>
+      <div class="feature-card">
+        <h3>⚡ Speed</h3>
+        <p>Instant verification eliminates manual checks and reduces processing time.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🌍 Accessibility</h3>
+        <p>Verify documents anywhere, anytime, using a hash or the uploaded file.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🧩 Role-Based</h3>
+        <p>Separate portals for Users, Issuers, and Verifiers keep access clean and secure.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="process" id="process">
+    <h2>How It Works</h2>
+    <div class="step-grid">
+      <article class="step-card">
+        <div class="step-badge">1</div>
+        <div class="step-icon">📤</div>
+        <h3>Upload</h3>
+        <p>Upload a document (e.g., PDF). We create a SHA-256 hash locally—your file itself is never stored.</p>
+      </article>
+      <article class="step-card">
+        <div class="step-badge">2</div>
+        <div class="step-icon">🧾</div>
+        <h3>Issue</h3>
+        <p>Authorized Issuer anchors the hash on-chain with metadata (issuer ID, timestamp) and returns a receipt.</p>
+      </article>
+      <article class="step-card">
+        <div class="step-badge">3</div>
+        <div class="step-icon">✅</div>
+        <h3>Verify</h3>
+        <p>Verifier uploads the file or enters its hash. We compare against the blockchain record—match = verified.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" id="faq">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-wrap">
+        {% for faq in faqs %}
+        <details class="faq-card">
+            <summary>
+                <span class="faq-toggle">+</span>
+                <span class="faq-q">{{ faq.question }}</span>
+            </summary>
+            <div class="faq-a">{{ faq.answer }}</div>
+        </details>
+        {% endfor %}
+    </div>
+</section>
+
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="brand">Document Verification System</div>
+      <div class="links">
+        <a href="#features">Features</a>
+        <a href="#process">Process</a>
+        <a href="#faq">FAQ</a>
+        <a href="{{ url_for('verifier') }}">Verify</a>
+      </div>
+      <div>© {{ (now or none) and now.year if false else "" }}</div>
+    </div>
+  </footer>
+
+  <!-- Lottie animation script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.6/lottie.min.js"></script>
+  <script>
+    var animation = bodymovin.loadAnimation({
+      container: document.getElementById('lottie-animation'),
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: 'static/img/technology.json' // Replace with your preferred animation URL
+    });
+  </script>
+
+  <script>
+    // Smooth scroll
+    document.querySelectorAll('.nav-links a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+</body>
+</html>

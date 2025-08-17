@@ -1,0 +1,27 @@
+<!-- templates/user_documents.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Documents</title>
+</head>
+<body>
+    <h2>📄 Documents issued to {{ user_email }}</h2>
+
+    {% if documents %}
+        <ul>
+        {% for doc in documents %}
+            <li>
+                <strong>{{ doc.file_name }}</strong><br>
+                Issued by: {{ doc.issuer_email }}<br>
+                Issued on: {{ doc.issued_on.strftime('%Y-%m-%d %H:%M:%S') }}<br>
+                <a href="{{ url_for('download_file', filename=doc.file_name) }}">⬇️ Download</a>
+            </li><br>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No documents found.</p>
+    {% endif %}
+
+    <br><a href="/user">← Search another email</a>
+</body>
+</html>

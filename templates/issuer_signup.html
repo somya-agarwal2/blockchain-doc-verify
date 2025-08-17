@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Issuer Signup - Document Verification</title>
+  <style>
+    :root {
+      --navy: #01204E;
+      --teal: #028391;
+      --text-light: #cfefff;
+      --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      background: linear-gradient(135deg, var(--navy), var(--teal));
+      padding-top: 70px;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: var(--navy);
+      color: #fff;
+      z-index: 999;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 10%;
+    }
+    .topbar .brand {
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: 0.5px;
+    }
+    .topbar .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 24px;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+    .topbar .nav-links a:hover {
+      color: var(--teal);
+    }
+
+    .signup-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 70px);
+      padding: 30px 20px;
+    }
+
+    .signup-card {
+      background: #fff;
+      color: var(--navy);
+      padding: 40px 32px;
+      border-radius: 16px;
+      max-width: 700px;
+      width: 100%;
+      box-shadow: var(--card-shadow);
+    }
+
+    .signup-card h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .signup-card p {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #455a78;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--teal);
+      box-shadow: 0 0 0 2px rgba(2, 131, 145, 0.2);
+    }
+
+    .form-row {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .form-row .form-group {
+      flex: 1 1 45%;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      background: var(--teal);
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: background 0.25s ease;
+    }
+
+    .btn:hover {
+      background: var(--navy);
+    }
+
+    .flash-message {
+      background-color: #fff3cd;
+      color: #856404;
+      padding: 10px 16px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      border-left: 4px solid #ffeeba;
+    }
+
+    .login-text {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 0.95rem;
+    }
+
+    .login-text a {
+      color: var(--teal);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .login-text a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .form-row {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="topbar">
+    <div class="nav-container">
+      <div class="brand">DocVerify</div>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="{{ url_for('home') }}#features">Features</a>
+       <a href="{{ url_for('home') }}#process">Process</a>
+        <a href="{{ url_for('home') }}#faq">FAQ</a>
+        <a href="{{ url_for('verifier') }}">Verify</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Signup Form -->
+  <div class="signup-wrapper">
+    <div class="signup-card">
+      <h2>🏢 Issuer Portal Signup</h2>
+      <p>Register your organization to issue verified documents.</p>
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="flash-message">
+            {% for message in messages %}
+              <p>{{ message }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form action="{{ url_for('issuer_signup') }}" method="POST" enctype="multipart/form-data">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="org">Organization Name</label>
+            <input type="text" name="org" id="org" required>
+          </div>
+          <div class="form-group">
+            <label for="org_type">Organization Type</label>
+            <select name="org_type" id="org_type" required>
+              <option value="">Select Type</option>
+              <option value="school">School</option>
+              <option value="college">College</option>
+              <option value="company">Company</option>
+              <option value="training_institute">Training Institute</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" name="email" id="email" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="proof_file">Upload Proof Document (PDF/Image)</label>
+          <input type="file" name="proof_file" id="proof_file" accept=".pdf,.jpg,.jpeg,.png" required>
+        </div>
+
+        <button type="submit" class="btn">Register Organization</button>
+
+        <p class="login-text">
+          Already have an account?
+          <a href="{{ url_for('issuer_login') }}">Login</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

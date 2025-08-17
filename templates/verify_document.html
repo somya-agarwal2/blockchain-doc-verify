@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Document Verification{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-6 rounded shadow mt-8">
+  <h2 class="text-2xl font-bold mb-4">Document Verification</h2>
+
+  <p><strong>Document Name:</strong> {{ document.file_name }}</p>
+  <p><strong>Issued To:</strong> {{ document.user_name }} ({{ document.user_email }})</p>
+  <p><strong>Issued By:</strong> {{ document.issuer_email }}</p>
+  <p><strong>Issued On:</strong> {{ document.issued_on.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+
+  <div class="mt-4">
+    <a href="{{ url_for('static', filename='uploads/' + document.file_name) }}" target="_blank"
+       class="text-blue-600 hover:underline">📄 View Document</a>
+  </div>
+</div>
+{% endblock %}
